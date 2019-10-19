@@ -1,16 +1,13 @@
-from IPython import display
-import numpy as np
 from mxnet import nd
-import math
 from matplotlib import pyplot as plt
-import random
 
 # number of outcomes - sample space
 # events are subsets of the sample space, elementary events are individual outcomes
 # random variable is, in this case, identity function X(zero) = 0.., X(two) = 2 ...
 n = 6  # outcomes are 0...n-1
 probabilities = nd.ones(n) / n
-number_of_tosses = 100
+number_of_tosses = 10000
+figure_format = 'svg'
 
 
 def multinomial():
@@ -24,7 +21,7 @@ def rolling():
     tosses = nd.random.multinomial(probabilities, shape=number_of_tosses)
     # nth element contains history of X(n) = n
     toss_history = nd.zeros((n, number_of_tosses))
-    # nth element contains total count of of X(n) = n
+    # nth element contains total count of X(n) = n
     toss_cumulative_counts = nd.zeros(n)
     for i, toss in enumerate(tosses):
         toss_cumulative_counts[int(toss.asscalar())] += 1
@@ -33,18 +30,24 @@ def rolling():
     # each columns is divided by current number of tosses
     # gives current estimated probability
     estimates = toss_history / x
-    probabilities_after_tosses(1, estimates)
+    plot_figure(estimates)
+    print_estimated_pr(estimates)
+
+
+def print_estimated_pr(estimates):
+    probabilities_after_tosses(number_of_tosses // 1000, estimates)
     probabilities_after_tosses(number_of_tosses // 100, estimates)
     probabilities_after_tosses(number_of_tosses // 10, estimates)
-    probabilities_after_tosses(number_of_tosses // 3, estimates)
-    probabilities_after_tosses(number_of_tosses // 2, estimates)
     probabilities_after_tosses(number_of_tosses, estimates)
-    set_figsize((6, 4))
+
+
+def plot_figure(estimated_pr):
+    set_figure_size((12, 8))
     for i in range(6):
-        plt.plot(estimates[i, :].asnumpy(), label=("Pr(die=" + str(i) + ")"))
+        plt.plot(estimated_pr[i, :].asnumpy(), label=("Pr(die=" + str(i) + ")"))
     plt.axhline(y=0.16666, color='black', linestyle='dashed')
     plt.legend()
-    plt.savefig('die_probabilities.png', dpi=300)
+    plt.savefig('die_probabilities.' + figure_format, dpi=300)
     plt.show()
 
 
@@ -52,16 +55,8 @@ def probabilities_after_tosses(tosses, estimated_pr):
     print('after {} tosses : {}'.format(tosses, estimated_pr[:, tosses - 1]))
 
 
-# Save to the d2l package.
-def use_svg_display():
-    """Use the svg format to display plot in jupyter."""
-    display.set_matplotlib_formats('png')
-
-
-# Save to the d2l package.
-def set_figsize(figsize=(3.5, 2.5)):
+def set_figure_size(figsize=(3.5, 2.5)):
     """Change the default figure size"""
-    use_svg_display()
     plt.rcParams['figure.figsize'] = figsize
 
 
