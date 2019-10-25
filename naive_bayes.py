@@ -13,12 +13,58 @@ def transform(data, label):
 mnist_train = gluon.data.vision.MNIST(train=True, transform=transform)
 mnist_test = gluon.data.vision.MNIST(train=False, transform=transform)
 
+number_of_classes = 10
+image_size = 28
+mnist_images, mnist_labels = mnist_train[:]  # all training examples
+
 
 def main():
-    image, label = mnist_train[3]
+    train_model(mnist_images, mnist_labels)
+
+
+def train_model(images, labels):
+    l_c = label_counts(labels)
+    label_probabilities = l_c / l_c.sum()
+    for label, probability in enumerate(label_probabilities):
+        print('label {} : {}'.format(label, probability))
+    print('Samples', nd.size_array(images))
+    label_pixel_probabilities(images, labels, l_c)
+
+
+def label_counts(labels):
+    ret_val = nd.zeros(number_of_classes)
+    for label in range(number_of_classes):
+        ret_val[label] = (labels == label).sum()
+    return ret_val
+
+
+def label_pixel_probabilities(images, labels, lbl_counts):
+    label_pixel_counts = nd.zeros((number_of_classes, image_size, image_size))
+    for label in range(number_of_classes):
+        # images for given label
+        label_images = images.asnumpy()[labels == label]
+        # numpy arrays : element wise sum = total counts of pixels for given label because pixel is 0 or 1
+        label_pixel_counts_numpy = label_images.sum(axis=0)
+        label_pixel_counts[label] = nd.array(label_pixel_counts_numpy)
+    label_counts_smoothed_reshaped = (lbl_counts + 1).reshape((10, 1, 1))
+    P_xy = (label_pixel_counts + 1) / label_counts_smoothed_reshaped
+    d2l.show_images(P_xy, 5, 2)  # 2x5=10
+    plt.show()
+    return P_xy
+
+
+def bayes_pred(x, P_y, P_xy):
+    x = x.expand_dims(axis=0)  # (28, 28) -> (1, 28, 28)
+    p_xy = P_xy * x + (1 - P_xy) * (1 - x)
+    p_xy = p_xy.reshape((10, -1)).prod(axis=1)  # p(x|y)
+    return p_xy * P_y
+
+
+def show_samples():
+    image, label = mnist_train[2]
     print(image.shape, label, type(image))
     print(label, type(label), label.dtype)
-    images, labels = mnist_train[10:38]
+    images, labels = mnist_train[0:4:1]
     print(images.shape, labels.shape)
     d2l.show_images(images, 2, 9)
     plt.show()
