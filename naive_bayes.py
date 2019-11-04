@@ -82,19 +82,6 @@ def bayes_pred_stable(x, P_y, P_xy):
     return p_xy + log_P_y
 
 
-def train_model(images, labels):
-    l_c = label_counts(labels)
-    # label probabilities
-    P_y = l_c / l_c.sum()
-    for label, probability in enumerate(P_y):
-        print('label {} : {}'.format(label, probability))
-    print('Samples', nd.size_array(images))
-    P_xy = label_pixel_probabilities(images, labels, l_c)
-    # test the prediction
-    image, label = mnist_test[1]
-    predict_one(image, label, P_y, P_xy)
-
-
 # verify prediction for one image
 def predict_one(x, y, P_y, P_xy):
     # label probability predictions
@@ -107,7 +94,33 @@ def predict_one(x, y, P_y, P_xy):
 
 # prediction for set of images
 def predict(X, P_y, P_xy):
-    return [bayes_pred_stable(x, P_y, P_xy).argmax(axis=0).asscalar() for x in X]
+    return [int(bayes_pred_stable(x, P_y, P_xy).argmax(axis=0).asscalar()) for x in X]
+
+
+def accuracy(P_y, P_xy):
+    X, y = mnist_test[:]
+    py = predict(X, P_y, P_xy)
+    matches = (nd.array(py).asnumpy() == y).sum()
+    print('matches : {}, total labels : {} => accuracy = {}'.format(matches, len(y), matches/len(y)))
+    return matches / len(y)
+
+
+def train_model(images, labels):
+    l_c = label_counts(labels)
+    # label probabilities
+    P_y = l_c / l_c.sum()
+    for label, probability in enumerate(P_y):
+        print('label {} : {}'.format(label, probability))
+    print('Samples', nd.size_array(images))
+    P_xy = label_pixel_probabilities(images, labels, l_c)
+    # test the prediction
+    image, label = mnist_test[1]
+    predict_one(image, label, P_y, P_xy)
+    X, y = mnist_test[:18]
+    d2l.show_images(X, 2, 9, titles=predict(X, P_y, P_xy))
+    plt.show()
+    ac = accuracy(P_y, P_xy)
+    print('accuracy  : {}'.format(ac))
 
 
 def main():
