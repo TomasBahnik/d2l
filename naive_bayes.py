@@ -1,5 +1,4 @@
 import d2l
-import math
 from mxnet import nd, gluon
 from matplotlib import pyplot as plt
 
@@ -101,7 +100,7 @@ def accuracy(P_y, P_xy):
     X, y = mnist_test[:]
     py = predict(X, P_y, P_xy)
     matches = (nd.array(py).asnumpy() == y).sum()
-    print('matches : {}, total labels : {} => accuracy = {}'.format(matches, len(y), matches/len(y)))
+    print('matches : {}, total labels : {} => accuracy = {}'.format(matches, len(y), matches / len(y)))
     return matches / len(y)
 
 
