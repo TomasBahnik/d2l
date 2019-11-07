@@ -29,7 +29,9 @@ def n_dim_array_operations():
     axis1 = np.concatenate([x, y], axis=1)
     print("concat axis 1 : {}, shape {}".format(axis1, axis1.shape))
     equal = x == y
+    greater = x > y
     print("equal x = y: {} == {} = {}".format(x, y, equal))
+    print("greater x > y: {} > {} = {}".format(x, y, greater))
 
 
 def broadcast():
@@ -68,10 +70,10 @@ def memory():
 
 def main():
     # n_dim_array()
-    # n_dim_array_operations()
+    n_dim_array_operations()
     # broadcast()
     # slicing()
-    memory()
+    # memory()
 
 
 if __name__ == '__main__':
