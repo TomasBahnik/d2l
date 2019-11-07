@@ -1,4 +1,3 @@
-from mxnet import np, npx
 import sys
 import pandas as pd
 from mxnet import np
@@ -12,7 +11,7 @@ def read_csv():
     inputs = inputs.fillna(inputs.mean())
     inputs = pd.get_dummies(inputs, dummy_na=True)
     X, y = np.array(inputs.values), np.array(outputs.values)
-    print("examples '{}', labels '{}'".format(X, y))
+    print("examples '{}/{}', labels '{}/{}'".format(X, type(X), y, type(y)))
 
 
 def write_csv():
