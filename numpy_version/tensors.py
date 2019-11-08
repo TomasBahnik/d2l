@@ -41,9 +41,28 @@ def non_reduction(A, axis):
     print("shape of A/sum_A non-reduced matrix (axis={}) \n{} = {}\n".format(axis, B, B.shape))
 
 
+def products(A):
+    x = np.arange(4)
+    y = np.ones(4)
+    print("x . y : {}, {}".format(np.dot(x, y), np.sum(x * y)))
+    print("A . x : {} has shape {}".format(np.dot(A, x), np.dot(A, x).shape))
+    B = np.ones(shape=(4, 3))
+    print("A . B : {} has shape {}".format(np.dot(A, B), np.dot(A, B).shape))
+    print("{}.{} has shape {}".format(A.shape, B.shape, np.dot(A, B).shape))
+
+
+def norms():
+    u = np.array([3, -4])
+    # l_2 (euclidean)
+    np.linalg.norm(u)
+    # l_1
+    np.abs(u).sum()
+
+
 def main():
     A = np.arange(20).reshape(5, 4)
-    matrices(A)
+    products(A)
+    # matrices(A)
 
 
 if __name__ == '__main__':
