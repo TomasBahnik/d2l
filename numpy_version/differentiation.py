@@ -3,9 +3,9 @@ from mxnet import autograd, np, npx
 
 npx.set_np()
 
-# the point where the gradient is calculated
+# the point where the gradient
 # for the scalar function y = 2 * np.dot(x, x) i.e. 2 * l_2(x)^2
-# the gradient is (vector) 4x
+# is calculated. The gradient is (vector) 4x
 x = np.arange(4)
 x.attach_grad()
 
@@ -17,6 +17,7 @@ def gradient():
     y.backward()
     print("a={}, y(x)|_a = {}".format(x, y))
     print("gradient of y(x) = 2 * np.dot(x, x) in x={} : {}".format(x, x.grad))
+    print("test gradient : {}".format(x.grad == 4 * x))
 
 
 def main():
