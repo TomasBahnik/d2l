@@ -6,13 +6,20 @@ npx.set_np()
 
 def f(x):
     # return np.dot(x, x)
-    return x.sum()
+    # return x.sum()
+    return x * x
 
 
 # manually calculated grad of to f(x)
 def grad_f(x):
-    # return 2 * x
-    return np.ones_like(x)
+    # return 2 * x # for dot(x,x)
+    # return np.ones_like(x) # x.sum()
+    # for vector x * x
+    x.attach_grad()
+    with autograd.record():
+        y = (x * x).sum()  # v is a scalar and grad is the same as for vector x * x
+    y.backward()
+    return x.grad
 
 
 # x : the point where the gradient
