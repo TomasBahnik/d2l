@@ -4,8 +4,15 @@ from mxnet import autograd, np, npx
 npx.set_np()
 
 
-def f(a):
-    return np.dot(a, a)
+def f(x):
+    # return np.dot(x, x)
+    return x.sum()
+
+
+# manually calculated grad of to f(x)
+def grad_f(x):
+    # return 2 * x
+    return np.ones_like(x)
 
 
 # x : the point where the gradient
@@ -19,7 +26,7 @@ def grad_f_at(x):
     y.backward()
     print("a={}, y(x)|_a = {}".format(x, y))
     print("gradient of f in x={} : {}".format(x, x.grad))
-    print("test gradient : {}".format(x.grad == 2 * x))
+    print("test gradient : {}".format(x.grad == grad_f(x)))
 
 
 def main():
