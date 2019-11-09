@@ -36,9 +36,42 @@ def grad_f_at(x):
     print("test gradient : {}".format(x.grad == grad_f(x)))
 
 
+def detached(x):
+    x.attach_grad()
+    with autograd.record():
+        y = x * x
+        u = y.detach()
+        z = u * x
+    z.backward()
+    print(x.grad == u)
+    y.backward()
+    print(x.grad == 2 * x)
+
+
+# not analytically defined function
+# where gradient can be numerically computed
+def g(a):
+    b = a * 2
+    while np.linalg.norm(b) < 1000:
+        b = b * 2
+    if b.sum() > 0:
+        c = b
+    else:
+        c = 100 * b
+    return c
+
+
+def grad_ctrl_flow():
+    x = np.random.normal()
+    x.attach_grad()
+    with autograd.record():
+        d = g(x)
+    d.backward()
+    print(x.grad == d / x)
+
+
 def main():
-    x = np.arange(5)
-    grad_f_at(x)
+    grad_ctrl_flow()
 
 
 if __name__ == '__main__':
