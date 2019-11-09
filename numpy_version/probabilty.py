@@ -1,7 +1,5 @@
 import sys
-import d2l
 from mxnet import np, npx, nd
-import random
 
 npx.set_np()
 
@@ -14,11 +12,12 @@ n = 6  # outcomes are 0...n-1
 
 # this is an ASSUMPTION that we can't *mathematically* prove
 # the correctness can be verified only by experiment like in physics
-#fair_probs = [1.0 / n] * n  # <class 'list'>
+# fair_probs = [1.0 / n] * n  # <class 'list'>
 fair_probs = np.ones(n) / n  # <class 'mxnet.numpy.ndarray'>
-fair_probs_nd = nd.ones(n) / n # <class 'mxnet.ndarray.ndarray.NDArray'>
+fair_probs_nd = nd.ones(n) / n  # <class 'mxnet.ndarray.ndarray.NDArray'>
 tosses = 100
 experiments = 3
+
 
 def multinomial_nd():
     m = nd.random.multinomial(fair_probs_nd)
