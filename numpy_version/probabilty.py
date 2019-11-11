@@ -4,9 +4,16 @@ from mxnet import np, npx, nd
 npx.set_np()
 
 # theory
-# number of outcomes - sample space
+# number of outcomes - sample space (Omega)
 # events are subsets of the sample space, elementary events are individual outcomes
+# probability space is a triple (Omega, sigma field of subsets of Omega (F), and P being a probability
+# measure on F)
+#    P(A) >= 0
+#    P(Omega) = 1
+#    P(union of disjoint events A_i) = Sum P(A_i)
 # random variable is, in the case of dice (also die), identity function X(zero) = 0.., X(two) = 2 ...
+# In general random variable is real valued function on sample space Omega R(omega)
+# The set {omega: a<=R(omega)<=b} must be event (also for <)
 
 n = 6  # outcomes are 0...n-1
 
