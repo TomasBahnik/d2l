@@ -15,12 +15,16 @@ def speed():
     c = np.zeros(n)
     for i in range(n):
         c[i] = a[i] + b[i]
-    print('for loop : %.5f sec' % timer.stop())
+    t1 = timer.stop()
 
     timer.start()
     d = a + b
+    t2 = timer.stop()
     print("d size {}".format(d.size))
-    print('vectors : %.10f sec' % timer.stop())
+    print('for loop : %.5f sec' % t1)
+    print('vectors : %.10f sec' % t2)
+    if t2 > 0:
+        print('ratio : %.1f sec' % t1 / t2)
 
 
 def normal(z, mu, sigma):
