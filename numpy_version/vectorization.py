@@ -2,10 +2,9 @@ import sys
 import d2l
 import math
 from mxnet import np
-import time
 from matplotlib import pyplot as plt
 
-n = 100000
+n = 10000
 a = np.ones(n)
 b = np.ones(n)
 x = np.arange(-7, 7, 0.01)
