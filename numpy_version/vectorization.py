@@ -22,9 +22,9 @@ def speed():
     t2 = float(timer.stop())
     print("d size {}".format(d.size))
     print('for loop : %.5f sec' % t1)
-    print('vectors : %.10f sec' % t2)
+    print('vectors  : %.10f sec' % t2)
     if t2 > 0:
-        print('ratio : %.1f sec' % float(t1 / t2))
+        print('ratio : %.1f' % float(t1 / t2))
 
 
 def normal(z, mu, sigma):
