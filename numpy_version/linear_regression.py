@@ -16,6 +16,9 @@ w2 = -3.4
 w3 = 6.7
 true_w = np.array([w1, w2, w3])  # shape or true_ must be the same as shape of  w
 true_b = 4.2  # shape (1,)
+
+features, labels = d2l.synthetic_data(true_w, true_b, measurement_count)
+
 # initial values of weights and bias with the same shape as true ones
 w = np.random.normal(0, 0.01, (3, 1))
 b = np.zeros(1)
@@ -39,7 +42,6 @@ def data_iter(batch_size, features, labels):
 
 
 def train_model(num_epochs, batch_size, lr):
-    features, labels = d2l.synthetic_data(true_w, true_b, measurement_count)
     for epoch in range(num_epochs):
         # Assuming the number of examples can be divided by the batch size, all
         # the examples in the training dataset are used once in one epoch
@@ -68,7 +70,6 @@ def train_model(num_epochs, batch_size, lr):
 
 
 def show_data():
-    features, labels = d2l.synthetic_data(true_w, true_b, measurement_count)
     print("feature size {}, label size {}".format(features.size, labels.size))
     print("feature shape {}, label shape {}".format(features.shape, labels.shape))
     print('features:', features[0], '\nlabel:', labels[0])
@@ -79,7 +80,6 @@ def show_data():
 
 
 def show_batches(batch_size):
-    features, labels = d2l.synthetic_data(true_w, true_b, measurement_count)
     for X, y in data_iter(batch_size, features, labels):
         print("features batch shape {}, labels batch shape {}".format(X.shape, y.shape))
         print("features batch size {}, labels batch size {}".format(X.size, y.size))
