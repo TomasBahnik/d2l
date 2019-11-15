@@ -4,9 +4,10 @@ def model_errors(w, true_w, b, true_b):
     rew = aew / rw * 100
     aeb = true_b - b
     reb = aeb / b * 100
-    print('estimated w = {}, true w = {}'.format(rw, true_w))
-    print('estimated b = {}, true b = {}'.format(b, true_b))
-    print('Abs error in estimating w', aew)
-    print('Abs error in estimating b', aeb)
-    print('Relative error of w : {} %'.format(rew))
-    print('Relative error of b : {} %'.format(reb))
+    print('==== model errors ====')
+    print('weights = {}, true weights = {}'.format(rw, true_w))
+    print('bias = {}, true bias = {}'.format(b, true_b))
+    print('Absolute error of weights : {}'.format(aew))
+    print('Absolute error of bias : {}'.format(aeb))
+    print('Relative error of weights : {} %'.format(rew))
+    print('Relative error of bias : {} %'.format(reb))
