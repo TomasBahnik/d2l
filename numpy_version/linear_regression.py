@@ -6,24 +6,26 @@ from matplotlib import pyplot as plt
 
 npx.set_np()
 
-number_of_samples = 1000
+BATCH_SIZE = 10
+NUM_EPOCHS = 3  # Number of iterations
+LR = 0.03  # Learning rate
+
+measurement_count = 1000
 w1 = 2
 w2 = -3.4
-true_w = np.array([w1, w2])
-true_b = 4.2
+true_w = np.array([w1, w2])  # shape = (2,1)
+true_b = 4.2  # shape (1,)
+# initial values of weights and bias with the same shape as true ones
+w = np.random.normal(0, 0.01, (2, 1))
+b = np.zeros(1)
+w.attach_grad()
+b.attach_grad()
+
+net = d2l.linreg  # Our fancy linear model
+loss = d2l.squared_loss  # 0.5 (y-y')^2
 
 
-def show_data():
-    features, labels = d2l.synthetic_data(true_w, true_b, 1000)
-    print("feature size {}, label size {}".format(features.size, labels.size))
-    print("feature shape {}, label shape {}".format(features.shape, labels.shape))
-    print('features:', features[0], '\nlabel:', labels[0])
-    d2l.set_figsize((3.5, 2.5))
-    d2l.plt.scatter(features[:, 1].asnumpy(), labels.asnumpy(), 1)
-    d2l.plt.scatter(features[:, 0].asnumpy(), labels.asnumpy(), 1)
-    plt.show()
-
-
+# generator function
 def data_iter(batch_size, features, labels):
     num_examples = len(features)
     indices = list(range(num_examples))
@@ -34,18 +36,60 @@ def data_iter(batch_size, features, labels):
         yield features[batch_indices], labels[batch_indices]
 
 
+def train_model(num_epochs, batch_size, lr):
+    features, labels = d2l.synthetic_data(true_w, true_b, measurement_count)
+    for epoch in range(num_epochs):
+        # Assuming the number of examples can be divided by the batch size, all
+        # the examples in the training dataset are used once in one epoch
+        # iteration. The features and tags of minibatch examples are given by X
+        # and y respectively
+        for X, y in data_iter(batch_size, features, labels):
+            with autograd.record():
+                l = loss(net(X, w, b), y)  # Minibatch loss in X and y
+            l.backward()  # Compute gradient on l with respect to [w,b]
+            d2l.sgd([w, b], lr, batch_size)  # Update parameters using their gradient
+        train_l = loss(net(features, w, b), labels)
+        print('epoch %d, loss %f' % (epoch + 1, train_l.mean().asnumpy()))
+
+    rw = w.reshape(true_w.shape)
+    aew = true_w - rw
+    rew = aew / rw * 100
+    aeb = true_b - b
+    reb = aeb / b * 100
+    print('estimated w = {}, true w = {}'.format(rw, true_w))
+    print('estimated b = {}, true b = {}'.format(b, true_b))
+    print('Abs error in estimating w', aew)
+    print('Abs error in estimating b', aeb)
+    print('Relative error of w : {} %'.format(rew))
+    print('Relative error of b : {} %'.format(reb))
+    # 4,2001953
+
+
+def show_data():
+    features, labels = d2l.synthetic_data(true_w, true_b, measurement_count)
+    print("feature size {}, label size {}".format(features.size, labels.size))
+    print("feature shape {}, label shape {}".format(features.shape, labels.shape))
+    print('features:', features[0], '\nlabel:', labels[0])
+    d2l.set_figsize((3.5, 2.5))
+    d2l.plt.scatter(features[:, 1].asnumpy(), labels.asnumpy(), 1)
+    d2l.plt.scatter(features[:, 0].asnumpy(), labels.asnumpy(), 1)
+    plt.show()
+
+
 def show_batches(batch_size):
-    features, labels = d2l.synthetic_data(true_w, true_b, number_of_samples)
+    features, labels = d2l.synthetic_data(true_w, true_b, measurement_count)
     for X, y in data_iter(batch_size, features, labels):
         print("features batch shape {}, labels batch shape {}".format(X.shape, y.shape))
         print("features batch size {}, labels batch size {}".format(X.size, y.size))
-        print("features batch {}, \n labels batch {}".format(X, y))
+        print("{}.\n ====\n features batch====\n {}, \n labels batch====\n {}".format(k, X, y))
+        # remove this `break`  to see all data
         break
 
 
 def main():
     # show_data()
-    show_batches(10)
+    # show_batches(BATCH_SIZE)
+    train_model(NUM_EPOCHS, BATCH_SIZE, LR)
 
 
 if __name__ == '__main__':
