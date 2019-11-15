@@ -32,7 +32,7 @@ loss = d2l.squared_loss  # 0.5 (y-y')^2
 
 
 # generator function
-def data_iter(batch_size, features, labels):
+def data_iter(batch_size):
     num_examples = len(features)
     indices = list(range(num_examples))
     # The examples are read at random, in no particular order
@@ -48,14 +48,13 @@ def train_model(num_epochs, batch_size, lr):
         # the examples in the training dataset are used once in one epoch
         # iteration. The features and tags of minibatch examples are given by X
         # and y respectively
-        for X, y in data_iter(batch_size, features, labels):
+        for X, y in data_iter(batch_size):
             with autograd.record():
-                l = loss(net(X, w, b), y)  # Minibatch loss in X and y
-            l.backward()  # Compute gradient on l with respect to [w,b]
+                ls = loss(net(X, w, b), y)  # Minibatch loss in X and y
+            ls.backward()  # Compute gradient on loss with respect to [w,b]
             d2l.sgd([w, b], lr, batch_size)  # Update parameters using their gradient
         train_l = loss(net(features, w, b), labels)
         print('epoch %d, loss %f' % (epoch + 1, train_l.mean().asnumpy()))
-
     common.model_errors(w, true_w, b, true_b)
 
 
@@ -70,10 +69,10 @@ def show_data():
 
 
 def show_batches(batch_size):
-    for X, y in data_iter(batch_size, features, labels):
+    for X, y in data_iter(batch_size):
         print("features batch shape {}, labels batch shape {}".format(X.shape, y.shape))
         print("features batch size {}, labels batch size {}".format(X.size, y.size))
-        print("{}.\n ====\n features batch====\n {}, \n labels batch====\n {}".format(k, X, y))
+        print("\n features batch====\n {}, \n labels batch====\n {}".format(X, y))
         # remove this `break`  to see all data
         break
 

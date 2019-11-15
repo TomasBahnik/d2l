@@ -1,3 +1,4 @@
+import sys
 import d2l
 import common
 from mxnet import autograd, np, npx, gluon
@@ -26,16 +27,26 @@ loss = gloss.L2Loss()  # The squared loss is also known as the L2 norm loss but 
 
 trainer = gluon.Trainer(net.collect_params(), 'sgd', {'learning_rate': LR})
 
-for epoch in range(1, NUM_EPOCHS + 1):
-    for X, y in data_iter:
-        with autograd.record():
-            l = loss(net(X), y)
-        l.backward()
-        trainer.step(BATCH_SIZE)
-    l = loss(net(features), labels)
-    print('epoch %d, loss: %f' % (epoch, l.mean().asnumpy()))
 
-w = net[0].weight.data()
-b = net[0].bias.data()
+def train_model_gluon(num_epochs, batch_size):
+    for epoch in range(1, num_epochs + 1):
+        for X, y in data_iter:
+            with autograd.record():
+                ls = loss(net(X), y)
+            ls.backward()
+            trainer.step(batch_size)
+        ls = loss(net(features), labels)
+        print('epoch %d, loss: %f' % (epoch, ls.mean().asnumpy()))
 
-common.model_errors(w, true_w, b, true_b)
+    w = net[0].weight.data()
+    b = net[0].bias.data()
+    common.model_errors(w, true_w, b, true_b)
+
+
+def main():
+    train_model_gluon(NUM_EPOCHS, BATCH_SIZE)
+
+
+if __name__ == '__main__':
+    main()
+    sys.exit(0)
