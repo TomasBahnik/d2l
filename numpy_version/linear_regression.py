@@ -7,17 +7,19 @@ from matplotlib import pyplot as plt
 npx.set_np()
 
 BATCH_SIZE = 10
-NUM_EPOCHS = 3  # Number of iterations
+NUM_EPOCHS = 4  # Number of iterations
 LR = 0.03  # Learning rate
 
-measurement_count = 1000
+measurement_count = 2000
 w1 = 2
 w2 = -3.4
-true_w = np.array([w1, w2])  # shape = (2,1)
+w3 = 6.7
+true_w = np.array([w1, w2, w3])  # shape or true_ must be the same as shape of  w
 true_b = 4.2  # shape (1,)
 # initial values of weights and bias with the same shape as true ones
-w = np.random.normal(0, 0.01, (2, 1))
+w = np.random.normal(0, 0.01, (3, 1))
 b = np.zeros(1)
+# attach grad attribute to all parameters
 w.attach_grad()
 b.attach_grad()
 
