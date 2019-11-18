@@ -63,9 +63,11 @@ def show_data():
     print("feature shape {}, label shape {}".format(features.shape, labels.shape))
     print('features:', features[0], '\nlabel:', labels[0])
     d2l.set_figsize((3.5, 2.5))
-    d2l.plt.scatter(features[:, 1].asnumpy(), labels.asnumpy(), 1)
-    d2l.plt.scatter(features[:, 0].asnumpy(), labels.asnumpy(), 1)
-    plt.show()
+    f = features[:, 0].asnumpy()
+    l = labels.asnumpy()
+    d2l.plt.scatter(f, l, 1)
+    print("Saving as ../images/train_data.svg")
+    plt.savefig('../images/train_data.svg')
 
 
 def show_batches(batch_size):
@@ -78,9 +80,9 @@ def show_batches(batch_size):
 
 
 def main():
-    # show_data()
+    show_data()
     # show_batches(BATCH_SIZE)
-    train_model(NUM_EPOCHS, BATCH_SIZE, LR)
+    # train_model(NUM_EPOCHS, BATCH_SIZE, LR)
 
 
 if __name__ == '__main__':
