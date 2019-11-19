@@ -3,20 +3,26 @@
 
 \section{Physics Parallels}
 
-Predictive power is a key measure of successful physical theory. Quantum physics predictions are formulated in terms of
+Quantum physics predictions are formulated in terms of
 probabilities. This principal limitation comes from existence of incompatible observables
-(measurable quantities) i.e. it is not possible to measure the values of these quantities simultaneously.
+(measurable quantities) when it is not possible to measure the values of these quantities simultaneously.
 
-Models of physical phenomena are mathematical theories. These models are build for centuries according to
-(existing) observations and experiments on one side and proven mathematical theories on the other side.
-Predictions from these models are verified by new experiments. As a general theories, physical models have its parameters.
-Some of them are fixed by already known data (e.g. masses of particles). Unknown parameters provide space for
-alternative outcomes in, so far, not experimentally covered area.
+Energy of the system plays crucial role in quantum and statistical physics.
+\begin{itemize}
+  \item Lowest-energy state is the ground state
+  \item Energy eigenstates (states with defined energy) are stationary states (measurement of observables is time independent)
+  \item For some system, requirement of mathematical consistency, limits allowed values of energy eigenvalues i.e energy levels are discrete
+\end{itemize}
 
-Above mentioned schema somehow correlates with probabilistic predictions, parameter tuning to fit the training data
-vs. verifying predictions for real data.
+Quantum physics generally deals with systems at subatomic level. Statistical physics derives its fundamental laws of macroscopic system, combining subatomic principles and general arguments translating extreme complexity of external interaction to the language of probability and statistics. In case of (quantum) statistical physics the inherent probabilistic nature of subatomic world is combined with probabilistic approach to, otherwise hopeless to solve, behavior of macroscopic bodies. 
 
-We can draw a parallel of mathematical formalism of quantum theory and math used in machine learning.
+Important case is statistical equilibrium when the (macroscopic) system is in quantum stationary state. After many heuristics arguments (to be specified) we conclude
+
+\[ \log w_n = \alpha + \beta E_n \] 
+
+where $w_n$ is quantum probability of macroscopic system being in stationary state with energy $E_n$. The entropy can be expressed as average value of $\log w_n$ (to be explained)
+
+\[ S = -\sum_n w_n \log w_n \] 
 
 \section{MXNET functions}
 
