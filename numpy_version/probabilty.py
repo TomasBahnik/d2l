@@ -30,9 +30,9 @@ def multinomial_nd():
     m = nd.random.multinomial(fair_probs_nd)
     print('single value :', m)
     m = nd.random.multinomial(fair_probs_nd, shape=tosses)
-    print("{} values {}".format(tosses, m))
+    print(f'{tosses} values {m}')
     m = nd.random.multinomial(fair_probs_nd, shape=(experiments, tosses))
-    print("{}x{} values {}\n{}".format(experiments, tosses, m, type(m)))
+    print(f'{experiments}x{tosses} values {m}\n{type(m)}')
 
 
 def multinomial_np():
@@ -41,9 +41,9 @@ def multinomial_np():
 
 
 def main():
-    multinomial_np()
+    # multinomial_np()
     # print("\n\n **** ND")
-    # multinomial_nd()
+    multinomial_nd()
 
 
 if __name__ == '__main__':
