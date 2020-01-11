@@ -8,6 +8,10 @@ batch_size = 100
 mnist = mx.test_utils.get_mnist()
 train_data = np.reshape(mnist['train_data'], (-1, 28 * 28))
 test_data = np.reshape(mnist['test_data'], (-1, 28 * 28))
+train_iter = mx.io.NDArrayIter(data={'data': train_data}, label={'label': mnist['train_label']},
+                               batch_size=batch_size)
+test_iter = mx.io.NDArrayIter(data={'data': test_data}, label={'label': mnist['test_label']},
+                              batch_size=batch_size)
 
 
 # used in naive_bayes.py together with alternative way of loading MNIST dataset
@@ -37,6 +41,9 @@ def get_model_ctx():
         return mx.cpu()
 
 
+model_ctx = get_model_ctx()
+
+
 def show_mnist():
     mx.random.seed(1)
     print('Test data labels shape : {}'.format(mnist['test_label'].shape))
@@ -53,12 +60,7 @@ def show_mnist():
 
 def set_params():
     n_batches = train_data.shape[0] / batch_size
-    train_iter = mx.io.NDArrayIter(data={'data': train_data}, label={'label': mnist['train_label']},
-                                   batch_size=batch_size)
-    test_iter = mx.io.NDArrayIter(data={'data': test_data}, label={'label': mnist['test_label']},
-                                  batch_size=batch_size)
     print('parameters : n_batches = {}'.format(n_batches))
-
 
 
 def main():

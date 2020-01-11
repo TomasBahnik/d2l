@@ -35,7 +35,7 @@ class VAE(gluon.HybridBlock):
         self.mu = mu
         # eps = F.random_normal(loc=0, scale=1, shape=mu.shape, ctx=model_ctx)
         # this would work fine only for nd (i.e. non-hybridized block)
-        eps = F.random_normal(loc=0, scale=1, shape=(self.batch_size, self.n_latent), ctx=init_vae.get_model_ctx())
+        eps = F.random_normal(loc=0, scale=1, shape=(self.batch_size, self.n_latent), ctx=init_vae.model_ctx)
         z = mu + F.exp(0.5 * lv) * eps
         y = self.decoder(z)
         self.output = y
