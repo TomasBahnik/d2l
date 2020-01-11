@@ -23,13 +23,19 @@ test_iter = mx.io.NDArrayIter(data={'data': test_data}, label={'label': mnist['t
 # mnist_test = gluon.data.vision.MNIST(train=False, transform=transform)
 # train_images, train_labels = mnist_train[:]
 
-
+# On Ubuntu fails with error
 def gpu_exists(gpu_number=0):
-    try:
-        _ = mx.nd.array([1, 2, 3], ctx=mx.gpu(gpu_number))
-    except mx.MXNetError:
-        return False
-    return True
+    return False
+    # terminate called after throwing an instance of 'dmlc::Error'
+    # what():  [22:03:01] src/storage/storage.cc:119: Compile with USE_CUDA=1 to enable GPU usage
+    # Stack trace:
+    # [bt] (0) /home/ubuntu/miniconda3/envs/pekat/lib/python3.7/site-packages/mxnet/libmxnet.so(+0x30a67b) [0x7feb4442b67b]
+    # [bt] (1) /home/ubuntu/miniconda3/envs/pekat/lib/python3.7/site-packages/mxnet/libmxnet.so(+0x3d46e45) [0x7feb47e67e45]
+    # try:
+    #     _ = mx.nd.array([1, 2, 3], ctx=mx.gpu(gpu_number))
+    # except mx.MXNetError:
+    #     return False
+    # return True
 
 
 def get_model_ctx():
