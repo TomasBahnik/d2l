@@ -24,10 +24,10 @@ test_iter = mx.io.NDArrayIter(data={'data': test_data}, label={'label': mnist['t
 # train_images, train_labels = mnist_train[:]
 
 
-def gpu_exists():
+def gpu_exists(gpu_number=0):
     try:
-        mx.nd.zeros((1,), ctx=mx.gpu(0))
-    except:
+        _ = mx.nd.array([1, 2, 3], ctx=mx.gpu(gpu_number))
+    except mx.MXNetError:
         return False
     return True
 
