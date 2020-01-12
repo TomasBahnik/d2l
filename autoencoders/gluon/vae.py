@@ -1,8 +1,7 @@
 # from https://gluon.mxnet.io/chapter13_unsupervised-learning/vae-gluon.html
+import init_vae
 from mxnet import gluon
 from mxnet.gluon import nn
-
-import autoencoders.gluon.init_vae as init_vae
 
 
 class VAE(gluon.HybridBlock):

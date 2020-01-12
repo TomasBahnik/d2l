@@ -1,3 +1,5 @@
+## Issues
+### MXNET 
 Linux MXNET version  1.6.0b20191122 had issues with GPU check
 ```text
  terminate called after throwing an instance of 'dmlc::Error'
@@ -25,3 +27,8 @@ Installing collected packages: mxnet
       Successfully uninstalled mxnet-1.6.0b20191122
 Successfully installed mxnet-1.6.0b20200111
 ```
+
+### IntelliJ
+Does not resolve `sys.path` by including current dir. `import <file_name_without_.py>` is marked as unresolved even
+the files are located in the same directory. Explicit path added to Python SDK classpath configuration e.g. 
+`<path_to_d2l_repository>\autoencoders\gluon` 

@@ -1,9 +1,10 @@
 import time
+
+import init_vae
 import mxnet as mx
-from autoencoders.gluon.vae import VAE
 from mxnet import gluon, autograd, nd
 from tqdm import tqdm, notebook
-import autoencoders.gluon.init_vae as init_vae
+from vae import VAE
 
 n_hidden = 400
 n_latent = 2
