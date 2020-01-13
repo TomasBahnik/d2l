@@ -1,4 +1,6 @@
 # from https://gluon.mxnet.io/chapter13_unsupervised-learning/vae-gluon.html
+# based on Diederik P Kingma, Max Welling : Auto-Encoding Variational Bayes https://arxiv.org/abs/1312.6114
+# same as for keras
 import init_vae
 from mxnet import gluon
 from mxnet.gluon import nn
