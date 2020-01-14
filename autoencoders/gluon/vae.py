@@ -1,48 +1,64 @@
-# from https://gluon.mxnet.io/chapter13_unsupervised-learning/vae-gluon.html
-# based on Diederik P Kingma, Max Welling : Auto-Encoding Variational Bayes https://arxiv.org/abs/1312.6114
-# same as for keras
+import time
+
 import init_vae
-from mxnet import gluon
-from mxnet.gluon import nn
+import mxnet as mx
+from mxnet import gluon, autograd, nd
+from tqdm import tqdm, notebook
+from vae_class import VAE
 
+n_hidden = 400
+n_latent = 2
+n_layers = 2  # num of dense layers in encoder and decoder respectively
+n_output = 784
+model_prefix = 'vae_gluon_{}d{}l{}h.params'.format(n_latent, n_layers, n_hidden)
+model_ctx = init_vae.model_ctx
+train_iter = init_vae.train_iter
+test_iter = init_vae.test_iter
 
-class VAE(gluon.HybridBlock):
-    def __init__(self, n_hidden=400, n_latent=2, n_layers=1, n_output=784, batch_size=100, act_type='relu', **kwargs):
-        self.soft_zero = 1e-10
-        self.n_latent = n_latent
-        self.batch_size = batch_size
-        self.output = None
-        self.mu = None
-        # note to self: requring batch_size in model definition is sad, not sure how to deal with this otherwise though
-        super(VAE, self).__init__(**kwargs)
-        # self.use_aux_logits = use_aux_logits
-        with self.name_scope():
-            self.encoder = nn.HybridSequential(prefix='encoder')
-            for i in range(n_layers):
-                self.encoder.add(nn.Dense(n_hidden, activation=act_type))
-            self.encoder.add(nn.Dense(n_latent * 2, activation=None))
+net = VAE(n_hidden=n_hidden, n_latent=n_latent, n_layers=n_layers, n_output=n_output, batch_size=init_vae.batch_size)
 
-            self.decoder = nn.HybridSequential(prefix='decoder')
-            for i in range(n_layers):
-                self.decoder.add(nn.Dense(n_hidden, activation=act_type))
-            self.decoder.add(nn.Dense(n_output, activation='sigmoid'))
+net.collect_params().initialize(mx.init.Xavier(), ctx=model_ctx)
+net.hybridize()
+trainer = gluon.Trainer(net.collect_params(), 'adam', {'learning_rate': .001})
 
-    def hybrid_forward(self, F, x):
-        h = self.encoder(x)
-        # print(h)
-        mu_lv = F.split(h, axis=1, num_outputs=2)
-        mu = mu_lv[0]
-        lv = mu_lv[1]
-        self.mu = mu
-        # eps = F.random_normal(loc=0, scale=1, shape=mu.shape, ctx=model_ctx)
-        # this would work fine only for nd (i.e. non-hybridized block)
-        eps = F.random_normal(loc=0, scale=1, shape=(self.batch_size, self.n_latent), ctx=init_vae.model_ctx)
-        z = mu + F.exp(0.5 * lv) * eps
-        y = self.decoder(z)
-        self.output = y
+n_epoch = 50
+print_period = n_epoch // 10
+start = time.time()
 
-        KL = 0.5 * F.sum(1 + lv - mu * mu - F.exp(lv), axis=1)
-        logloss = F.sum(x * F.log(y + self.soft_zero) + (1 - x) * F.log(1 - y + self.soft_zero), axis=1)
-        loss = -logloss - KL
+training_loss = []
+validation_loss = []
+for epoch in notebook.tqdm(range(n_epoch), desc='epochs'):
+    epoch_loss = 0
+    epoch_val_loss = 0
 
-        return loss
+    train_iter.reset()
+    test_iter.reset()
+
+    n_batch_train = 0
+    for batch in train_iter:
+        n_batch_train += 1
+        data = batch.data[0].as_in_context(model_ctx)
+        with autograd.record():
+            loss = net(data)
+        loss.backward()
+        trainer.step(data.shape[0])
+        epoch_loss += nd.mean(loss).asscalar()
+
+    n_batch_val = 0
+    for batch in test_iter:
+        n_batch_val += 1
+        data = batch.data[0].as_in_context(model_ctx)
+        loss = net(data)
+        epoch_val_loss += nd.mean(loss).asscalar()
+
+    epoch_loss /= n_batch_train
+    epoch_val_loss /= n_batch_val
+
+    training_loss.append(epoch_loss)
+    validation_loss.append(epoch_val_loss)
+
+    if epoch % max(print_period, 1) == 0:
+        tqdm.write('Epoch{}, Training loss {:.2f}, Validation loss {:.2f}'.format(epoch, epoch_loss, epoch_val_loss))
+
+end = time.time()
+print('Time elapsed: {:.2f}s'.format(end - start))
