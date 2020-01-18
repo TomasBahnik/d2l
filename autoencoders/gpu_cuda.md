@@ -17,3 +17,58 @@ An incomplete installation of libglvnd was found. Do you want to install a full 
 
 Installation of the kernel module for the NVIDIA Accelerated Graphics Driver for Linux-x86_64 (version 440.33.01) is now complete.
 ```
+
+### CUDA
+   * https://developer.nvidia.com/cuda-downloads?target_os=Linux&target_arch=x86_64&target_distro=Ubuntu&target_version=1804&target_type=runfilelocal
+   * wget http://developer.download.nvidia.com/compute/cuda/10.2/Prod/local_installers/cuda_10.2.89_440.33.01_linux.run
+   * sudo sh cuda_10.2.89_440.33.01_linux.run
+
+Driver installed
+   
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ CUDA Installer                                                               │
+│ - [ ] Driver                                                                 │
+│      [ ] 440.33.01                                                           │
+│ + [X] CUDA Toolkit 10.2                                                      │
+│   [ ] CUDA Samples 10.2                                                      │
+│   [ ] CUDA Demo Suite 10.2                                                   │
+│   [ ] CUDA Documentation 10.2                                                │
+│   Options                                                                    │
+│   Install
+```
+results in 
+
+```text
+terminate called after throwing an instance of 'boost::filesystem::filesystem_error'
+  what():  boost::filesystem::copy_file: No such file or directory: "./builds/cuda-toolkit/nvml/example/example.c", "/usr/local/cuda-10.2/nvml/example/example.c"
+Aborted (core dumped)
+```
+cleaned /tmp 
+`rm -rf /usr/local/cuda-x.y`
+
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ CUDA Installer                                                               │
+│ - [X] Driver                                                                 │
+│      [ ] 440.33.01                                                           │
+│ + [X] CUDA Toolkit 10.2                                                      │
+│   [X] CUDA Samples 10.2                                                      │
+│   [ ] CUDA Demo Suite 10.2                                                   │
+│   [ ] CUDA Documentation 10.2                                                │
+│   Options                                                                    │
+│   Install                      
+```
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ Existing installation of CUDA Toolkit 10.2 found:                            │
+│ Upgrade all                                                                  │
+│ Choose components to upgrade                                                 │
+│ No, abort installation           
+
+```text
+(base) ubuntu@ip-172-31-4-156:~$ sudo sh cuda_10.2.89_440.33.01_linux.run
+terminate called after throwing an instance of 'boost::filesystem::filesystem_error'
+  what():  boost::filesystem::copy_file: No space left on device: "./builds/cuda-toolkit/nsight-compute-2019.5.0/target/linux-desktop-glibc_2_19_0-ppc64le/nv-nsight-cu-cli", "/usr/local/cuda-10.2/nsight-compute-2019.5.0/target/linux-desktop-glibc_2_19_0-ppc64le/nv-nsight-cu-cli"
+Aborted (core dumped)
+
+```
