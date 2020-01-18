@@ -1,5 +1,18 @@
-\documentclass[12pt]{article} 
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+%\usepackage{amsthm}
+\usepackage{bm}
+% used from https://github.com/goodfeli/dlbook_notation
+\input{math_commands.tex}
+
 \begin{document}
+%\setlength{\parskip}{0.25 \baselineskip}
+%\newlength{\figwidth}
+%\setlength{\figwidth}{26pc}
+% Spacing between notation sections
+\newlength{\notationgap}
+\setlength{\notationgap}{1pc}
 
 \section{Physics Parallels}
 
@@ -22,13 +35,19 @@ Important case is statistical equilibrium when the (macroscopic) system is in qu
 
 where $w_n$ is quantum probability of macroscopic system being in stationary state with energy $E_n$. The entropy can be expressed as average value of $\log w_n$ (to be explained)
 
-\[ S = -\sum_n w_n \log w_n \] 
+\[ S = -\sum_n w_n \log w_n \]
+
+\section{Definitions}
+
+$\normlp$ norm of $\vx$ : $\displaystyle || \vx ||_p$ 
 
 \section{MXNET functions}
 
 mxnet.gluon.loss.L2Loss : $L = \frac{1}{2} \sum_i \vert {label}_i - {pred}_i \vert^2$. While original definition was
 
 \[\|\mathbf{x}\|_2 = \sqrt{\sum_{i=1}^n x_i^2}\]
+
+\input{notation.tex}
 
 \end{document}
 
