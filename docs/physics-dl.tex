@@ -1,15 +1,19 @@
 \documentclass[12pt]{article}
 \usepackage{amsmath}
 \usepackage{amsfonts}
-%\usepackage{amsthm}
 \usepackage{bm}
+\usepackage{physics}
+\usepackage[total={7in,10in}]{geometry}
+\geometry{a4paper}
+\usepackage{hyperref} % Colors for links, text and headings
 % used from https://github.com/goodfeli/dlbook_notation
 \input{math_commands.tex}
 
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\normp}[2]{\norm{\vb*{#1}}_#2}
+
 \begin{document}
-%\setlength{\parskip}{0.25 \baselineskip}
-%\newlength{\figwidth}
-%\setlength{\figwidth}{26pc}
 % Spacing between notation sections
 \newlength{\notationgap}
 \setlength{\notationgap}{1pc}
@@ -31,15 +35,20 @@ Quantum physics generally deals with systems at subatomic level. Statistical phy
 
 Important case is statistical equilibrium when the (macroscopic) system is in quantum stationary state. After many heuristics arguments (to be specified) we conclude
 
-\[ \log w_n = \alpha + \beta E_n \] 
+\be \log w_n = \alpha + \beta E_n \ee 
 
 where $w_n$ is quantum probability of macroscopic system being in stationary state with energy $E_n$. The entropy can be expressed as average value of $\log w_n$ (to be explained)
 
-\[ S = -\sum_n w_n \log w_n \]
+\be S = -\sum_n w_n \log w_n \ee
 
 \section{Definitions}
+Some definitions from \href{http://www.deeplearningbook.org/}{Deep Learning Book} using their \href{https://github.com/goodfeli/dlbook_notation}{\LaTeX templates}. \href{http://mirrors.ibiblio.org/CTAN/macros/latex/contrib/physics/physics.pdf}{Physics package} provides the same symbols in more generic way eg. random vector $\vb*{x}=$\verb|\vb*{x}| and vector $\vb{x}=$\verb|\vb{x}| instead of separate definition for vector $\vx=$\verb|\vx| and random vector $\rvx=$\verb|\rvx|. Where possible I use symbols from \verb|physics| package like $\normp{x}{p}$ (\verb|\normp{x}{p}|) for $\normlp$
 
-$\normlp$ norm of $\vx$ : $\displaystyle || \vx ||_p$ 
+
+\noindent$\normlp$ norm of $\vx$
+\be || \vx ||_p = \left(\sum_i |x_i|^p\right)^\frac{1}{p}\label{eq_normlp}\ee
+for $p \in \sR, p \ge 1$. $\normltwo$ is abbreviated as $||\vx|| = \norm{\vb*{x}}$. {\bf Squared} $\normltwo$ norm meaning scalar product $\vx\cdot\vx = \vx^T\vx =\bra{\vx}\ket{\vx}$ (Dirac notation) doesn't have any special symbol.
+\be \normmax = \max_i|x_i| \ee  
 
 \section{MXNET functions}
 
