@@ -4,6 +4,7 @@
    * sudo apt install gcc
    * sudo apt install make
    * sudo ./NVIDIA-Linux-x86_64-440.33.01.run
+   * Uninstall : sudo ./NVIDIA-Linux-x86-310.19.run --uninstall | --help | -A
    
 ```text
 WARNING: nvidia-installer was forced to guess the X library path '/usr/lib' and X module path '/usr/lib/xorg/modules'; these paths were not queryable from the system.
@@ -70,5 +71,41 @@ cleaned /tmp
 terminate called after throwing an instance of 'boost::filesystem::filesystem_error'
   what():  boost::filesystem::copy_file: No space left on device: "./builds/cuda-toolkit/nsight-compute-2019.5.0/target/linux-desktop-glibc_2_19_0-ppc64le/nv-nsight-cu-cli", "/usr/local/cuda-10.2/nsight-compute-2019.5.0/target/linux-desktop-glibc_2_19_0-ppc64le/nv-nsight-cu-cli"
 Aborted (core dumped)
+```
 
+After resizing disk to 
+```text
+┌──────────────────────────────────────────────────────────────────────────────┐
+│ CUDA Installer                                                               │
+│ - [ ] Driver                                                                 │
+│      [ ] 440.33.01                                                           │
+│ + [X] CUDA Toolkit 10.2                                                      │
+│   [X] CUDA Samples 10.2                                                      │
+│   [ ] CUDA Demo Suite 10.2                                                   │
+│   [ ] CUDA Documentation 10.2                                                │
+│   Options                                                                    │
+│   Install                      
+```
+
+```text
+===========
+= Summary =
+===========
+
+Driver:   Not Selected
+Toolkit:  Installed in /usr/local/cuda-10.2/
+Samples:  Installed in /home/ubuntu/, but missing recommended libraries
+
+Please make sure that
+ -   PATH includes /usr/local/cuda-10.2/bin
+ -   LD_LIBRARY_PATH includes /usr/local/cuda-10.2/lib64, or, add /usr/local/cuda-10.2/lib64 to /etc/ld.so.conf and run ldconfig as root
+
+To uninstall the CUDA Toolkit, run cuda-uninstaller in /usr/local/cuda-10.2/bin
+
+Please see CUDA_Installation_Guide_Linux.pdf in /usr/local/cuda-10.2/doc/pdf for detailed information on setting up CUDA.
+***WARNING: Incomplete installation! This installation did not install the CUDA Driver. A driver of version at least 440.00 is required for CUDA 10.2 functionality to work.
+To install the driver using this installer, run the following command, replacing <CudaInstaller> with the name of this run file:
+    sudo <CudaInstaller>.run --silent --driver
+
+Logfile is /var/log/cuda-installer.log
 ```
