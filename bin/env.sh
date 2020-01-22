@@ -21,10 +21,11 @@ ARGS_COUNT=${#ARGS[@]}
 
 # separate directory for all logs
 export BASE_LOG_DIR=$PROJECT_DIR/log
-mkdir -p "$LOG_DIR"
+mkdir -p "$BASE_LOG_DIR"
 LOG_FILE=$BASE_LOG_DIR/$SCRIPT_NAME.log
+export CONDA_HOME= ~/miniconda3
 
 logger "*** New run of script   : $SCRIPT_NAME"
 logger "ARGS_COUNT              : $ARGS_COUNT"
 logger "PROJECT_DIR             : $PROJECT_DIR"
-logger "LOG_DIR                 : $LOG_DIR"
+logger "BASE_LOG_DIR            : $BASE_LOG_DIR"
