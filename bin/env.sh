@@ -52,3 +52,13 @@ logger "PROJECT_DIR             : $PROJECT_DIR"
 logger "BASE_LOG_DIR            : $BASE_LOG_DIR"
 logger "CONDA_ENV               : $CONDA_ENV"
 logger "CONDA_HOME              : $CONDA_HOME"
+
+# https://github.com/conda/conda/issues/7980
+source "$CONDA_HOME"/etc/profile.d/conda.sh
+
+logger "Create Conda env : $CONDA_ENV"
+conda create --name "$CONDA_ENV"
+logger "Activate Conda env : $CONDA_ENV"
+conda activate "$CONDA_ENV"
+logger "Install python $PYTHON_VER and pip"
+conda install python="$PYTHON_VER" pip

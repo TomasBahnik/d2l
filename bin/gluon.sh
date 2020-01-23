@@ -9,17 +9,8 @@ WORK_DIR=$(dirname "$SCRIPT")
 # shellcheck source=env.sh
 source "$WORK_DIR"/env.sh
 
-# https://github.com/conda/conda/issues/7980
-source "$CONDA_HOME"/etc/profile.d/conda.sh
-
-logger "Create Conda env : $CONDA_ENV"
-conda create --name "$CONDA_ENV"
-logger "Activate Conda env : $CONDA_ENV"
-conda activate "$CONDA_ENV"
-logger "Install python $PYTHON_VER and pip"
-conda install python="$PYTHON_VER" pip
+# matplotlib, ipython .. and others for d2l.ai
 logger "Install d2l by pip"
-# matplotlib, ipython .. and others
 pip install git+https://github.com/d2l-ai/d2l-en
 if [[ "$CONDA_ENV" == *"gpu"* ]]; then
   logger "Install MXNET GPU version '$MXNET_CUDA_VER'"
