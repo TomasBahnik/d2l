@@ -4,11 +4,13 @@
 #    GPU version is installed
 SCRIPT=$(realpath "$0")
 WORK_DIR=$(dirname "$SCRIPT")
-SCRIPT_NAME=$(basename "$0" .sh)
 
+# https://github.com/koalaman/shellcheck/wiki/SC1090
+# shellcheck source=env.sh
 source "$WORK_DIR"/env.sh
+
 # https://github.com/conda/conda/issues/7980
-source $CONDA_HOME/etc/profile.d/conda.sh
+source "$CONDA_HOME"/etc/profile.d/conda.sh
 
 logger "Create Conda env : $CONDA_ENV"
 conda create --name "$CONDA_ENV"
