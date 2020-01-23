@@ -17,5 +17,7 @@ if [[ "$CONDA_ENV" == *"gpu"* ]]; then
   #logger "Install Keras GPU"
   #conda install -c anaconda keras-gpu
 fi
+logger "Install matplotlib used by VAE"
+conda install matplotlib
 logger "Install pydot used by VAE"
 conda install pydot
