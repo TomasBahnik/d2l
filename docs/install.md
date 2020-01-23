@@ -9,8 +9,7 @@
    * bash Miniconda3-latest-Linux-x86_64.sh
    * source ~/.bashrc : Execute commands from a file in the current shell
    * [gluon install](../bin/gluon.sh)
-   * conda install keras
-   * conda install pydot (used by keras impl of VAE)
+   * [keras install](../bin/keras.sh)
    * conda install pytorch torchvision cudatoolkit=10.1 -c pytorch
      from https://pytorch.org/,stable,cuda 10.1 (only),
    * conda list PIL, if `7.x` conda install pillow==6.1
