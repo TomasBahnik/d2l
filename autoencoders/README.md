@@ -3,6 +3,19 @@ Implementation of the [Auto-Encoding Variational Bayes](https://arxiv.org/abs/13
    * [MXNET/gluon VAE](https://gluon.mxnet.io/chapter13_unsupervised-learning/vae-gluon.html)
    * [Keras VAE](https://github.com/keras-team/keras/blob/master/examples/variational_autoencoder.py)
    * [Pytorch VAE](https://github.com/pytorch/examples/tree/master/vae)
-   
-See READMEs in corresponding folders for possible installation notes. Run `python vae.py` in corresponding folder. 
+
+### Prepare envs
+Conda envs are created by corresponding scripts in [bin folder](../bin). Env name is the 1st argument. It it contains
+`gpu` GPU version is installed e.g. `./gluon.sh gluon-gpu` creates conda env with MXNET/gluon GPU.
+
+### Run   
+Run `python vae.py` in corresponding folder.
+
+### Measure GPU
+```text
+nvidia-smi --query-gpu=timestamp,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv -l 5
+```
+
+### Comaprison
+[vae comparison](../docs/vae)  
  
