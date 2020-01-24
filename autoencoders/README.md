@@ -12,7 +12,7 @@ environment contains `gpu` GPU version is installed e.g. `./gluon.sh gluon-gpu` 
 Run `python vae.py` in corresponding folder.
 
 ### Comparison
-Tested on Ubuntu 18.04, GPU Tesla 80. Usage measured by 
+Tested on Ubuntu 18.04, GPU Tesla K80. Usage measured by 
 ```text
 nvidia-smi --query-gpu=timestamp,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv -l 5
 ```
