@@ -1,3 +1,4 @@
+timestamp, temperature.gpu, utilization.gpu [%], utilization.memory [%], memory.total [MiB], memory.free [MiB], memory.used [MiB]
 2020/01/24 08:31:07.282, 45, 96 %, 6 %, 11441 MiB, 11441 MiB, 0 MiB
 2020/01/24 08:31:12.284, 45, 13 %, 0 %, 11441 MiB, 11327 MiB, 114 MiB
 2020/01/24 08:31:17.285, 45, 18 %, 3 %, 11441 MiB, 11125 MiB, 316 MiB
