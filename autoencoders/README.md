@@ -11,11 +11,16 @@ Conda envs are created by corresponding scripts in [bin folder](../bin). Env nam
 ### Run   
 Run `python vae.py` in corresponding folder.
 
-### Measure GPU
+### Comparison
+Measured by 
 ```text
 nvidia-smi --query-gpu=timestamp,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv -l 5
 ```
 
-### Comaprison
+and
+```text
+sudo watch nvidia-smi
+```
+
 [vae comparison](../docs/vae)  
  

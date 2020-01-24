@@ -14,6 +14,7 @@ SCRIPT=$(realpath "$0")
 WORK_DIR=$(dirname "$SCRIPT")
 SCRIPT_NAME=$(basename "$0" .sh)
 PROJECT_DIR=$WORK_DIR/..
+VAE_DIR=$PROJECT_DIR/autoencoders
 DEFAULT_CONDA_ENV=gluon
 PYTHON_VER=3.7
 

@@ -19,3 +19,6 @@ conda list PIL
 # pytorch impl of VAE : PIL `7.x` causes error `cannot import name 'PILLOW_VERSION' from 'PIL'
 logger "Install pillow 6.1 used by VAE"
 conda install pillow==6.1
+logger "mkdir results for reconstruction images"
+mkdir -p "$VAE_DIR/pytorch/results"
+
