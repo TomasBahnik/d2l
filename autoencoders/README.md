@@ -5,14 +5,15 @@ Implementation of the [Auto-Encoding Variational Bayes](https://arxiv.org/abs/13
    * [Pytorch VAE](https://github.com/pytorch/examples/tree/master/vae)
 
 ### Prepare envs
-Conda envs are created by corresponding scripts in [bin folder](../bin). Env name is the 1st argument. It it contains
-`gpu` GPU version is installed e.g. `./gluon.sh gluon-gpu` creates conda env with MXNET/gluon GPU.
+Conda envs are created by corresponding scripts in [bin folder](../bin). Env name is the 1st argument. If the name of 
+environment contains `gpu` GPU version is installed e.g. `./gluon.sh gluon-gpu` creates conda env with MXNET/gluon GPU.
 
 ### Run   
 Run `python vae.py` in corresponding folder.
 
 ### Comparison
-Measured by 
+GPU usage measured by 
+
 ```text
 nvidia-smi --query-gpu=timestamp,temperature.gpu,utilization.gpu,utilization.memory,memory.total,memory.free,memory.used --format=csv -l 5
 ```
@@ -22,5 +23,5 @@ and
 sudo watch nvidia-smi
 ```
 
-[vae comparison](../docs/vae)  
+[GPU consumption for different DL tools](../docs/vae)  
  
