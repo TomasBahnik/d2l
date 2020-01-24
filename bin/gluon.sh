@@ -1,5 +1,5 @@
 #!/bin/bash
-# Script for creating gluon conda env
+# Script for creating conda env
 #    * env name  is teh 1st argument (via env.sh). If it contains gpu
 #    GPU version is installed
 SCRIPT=$(realpath "$0")
