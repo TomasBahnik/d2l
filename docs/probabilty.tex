@@ -1,0 +1,40 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{bm}
+\usepackage{physics}
+\usepackage[total={7in,10in}]{geometry}
+\geometry{a4paper}
+\usepackage{hyperref} % Colors for links, text and headings
+% used from https://github.com/goodfeli/dlbook_notation
+\input{math_commands.tex}
+
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+\newcommand{\normp}[2]{\norm{\vb*{#1}}_#2}
+
+\begin{document}
+% Spacing between notation sections
+\newlength{\notationgap}
+\setlength{\notationgap}{1pc}
+
+\section{Probability theory}
+
+\subsection{Origin}
+This section is based on concept of {\bf probability as extended logic} developed by (professor of physics)
+\href{https://en.wikipedia.org/wiki/Edwin_Thompson_Jaynes}{Edwin Thompson Jaynes} and described in his book
+\href{https://www.amazon.com/Probability-Theory-Science-T-Jaynes/dp/0521592712}{Probability Theory: The Logic of Science}
+cited in books like
+\href{https://mitpress.mit.edu/books/machine-learning-1}{Machine Learning A Probabilistic Perspective (Kevin P. Murphy)} and 
+\href{https://mitpress.mit.edu/books/deep-learning}{Deep Learning (I.Goodfellow, Y.Bengio and A.Courville)}
+
+In this book E.T. Jaynes derives the probability theory {\bf from natural logic rules present in our (i.e.human) reasoning process}. 
+These rules are translated to mathematical theory by very
+thorough chain of arguments. Non of the question, the reader could have, is left without appropriate comment. 
+Note that the theory is consistent with the one based on the set and measure theory {\bf but} gives much more deeper insight 
+to the principles behind the math. Moreover, the principles used are very tightly related to the subject of 
+machine learning in general and deep learning in particular.
+
+E.T.Jaynes approach somehow resembles me \href{https://www.feynmanlectures.caltech.edu/}{The Feynman Lectures of Physics} where 
+the understanding of ideas is more important than mathematical formulas.  
+\end{document}
