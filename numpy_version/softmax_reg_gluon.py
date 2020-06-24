@@ -30,3 +30,4 @@ def predict_ch3(model, t_i, n=6):  # @save
 
 
 predict_ch3(net, test_iter)
+net.save_parameters('softmax.params')
