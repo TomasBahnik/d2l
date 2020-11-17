@@ -1,6 +1,6 @@
 import sys
 import d2l
-import common
+from d2l import common
 from mxnet import autograd, np, npx, gluon
 from mxnet import init
 from mxnet.gluon import nn

@@ -1,6 +1,6 @@
 import sys
 import d2l
-import common
+from d2l import common
 from mxnet import autograd, np, npx
 import random
 from matplotlib import pyplot as plt
