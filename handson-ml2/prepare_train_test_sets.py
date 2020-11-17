@@ -35,7 +35,7 @@ def split_train_test(data, test_ratio):
     return data.iloc[train_indices], data.iloc[test_indices]
 
 
-def stratum(data):
+def strata(data):
     data["income_cat"] = pd.cut(data["median_income"],
                                 bins=[0., 1.5, 3.0, 4.5, 6., np.inf],
                                 labels=[1, 2, 3, 4, 5])
@@ -44,12 +44,12 @@ def stratum(data):
 
 def split_data(data):
     split = StratifiedShuffleSplit(n_splits=1, test_size=0.2, random_state=42)
-    strat_test_set = None
-    strat_train_set = None
+    strata_test_set = None
+    strata_train_set = None
     for train_index, test_index in split.split(data, data["income_cat"]):
-        strat_train_set = housing.loc[train_index]
-        strat_test_set = housing.loc[test_index]
-    return [strat_train_set, strat_test_set]
+        strata_train_set = housing.loc[train_index]
+        strata_test_set = housing.loc[test_index]
+    return [strata_train_set, strata_test_set]
 
 
 if __name__ == '__main__':
@@ -58,8 +58,10 @@ if __name__ == '__main__':
     # train_set, test_set = split_train_test(housing, 0.2)
     # housing_with_id = housing.reset_index()
     # train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
-    stratum(housing)
+    strata(housing)
     # housing["income_cat"].hist()
     # plt.show()
     train_test = split_data(housing)
+    for set_ in train_test:
+        set_.drop("income_cat", axis=1, inplace=True)
     sys.exit(0)
