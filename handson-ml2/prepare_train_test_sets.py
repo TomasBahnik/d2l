@@ -47,21 +47,26 @@ def split_data(data):
     strata_test_set = None
     strata_train_set = None
     for train_index, test_index in split.split(data, data["income_cat"]):
-        strata_train_set = housing.loc[train_index]
-        strata_test_set = housing.loc[test_index]
+        strata_train_set = data.loc[train_index]
+        strata_test_set = data.loc[test_index]
     return [strata_train_set, strata_test_set]
 
 
-if __name__ == '__main__':
+def train_test_sets():
     fetch_housing_data()
-    housing = load_housing_data()
+    data = load_housing_data()
     # train_set, test_set = split_train_test(housing, 0.2)
     # housing_with_id = housing.reset_index()
     # train_set, test_set = train_test_split(housing, test_size=0.2, random_state=42)
-    strata(housing)
+    strata(data)
     # housing["income_cat"].hist()
     # plt.show()
-    train_test = split_data(housing)
+    train_test = split_data(data)
     for set_ in train_test:
         set_.drop("income_cat", axis=1, inplace=True)
+    return train_test
+
+
+if __name__ == '__main__':
+    train_test_sets()
     sys.exit(0)
