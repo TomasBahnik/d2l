@@ -7,18 +7,17 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.impute import SimpleImputer
 # from pandas.tools.plotting import scatter_matrix # For older versions of Pandas
 from sklearn.model_selection import train_test_split
 
-from functions_02 import save_fig, calif_image, IMAGES_PATH, scatter_plots, looking_for_correlation
+from common import IMAGES_PATH
+from prepare_data_ml_alg import features_labels
 from prepare_train_test_sets import load_housing_data, fetch_housing_data
 from prepare_train_test_sets import split_data
-from prepare_train_test_sets import split_train_test
 from prepare_train_test_sets import strata
 
 # To plot pretty figures
-# get_ipython().run_line_magic('matplotlib', 'inline')
-
 mpl.rc('axes', labelsize=14)
 mpl.rc('xtick', labelsize=12)
 mpl.rc('ytick', labelsize=12)
@@ -31,21 +30,6 @@ warnings.filterwarnings(action="ignore", message="^internal gelsd")
 
 fetch_housing_data()
 housing = load_housing_data()
-
-
-def basic_info(data=housing):
-    data.head()
-    data.info()
-    data["ocean_proximity"].value_counts()
-    data.describe()
-    data.hist(bins=50, figsize=(20, 15))
-    save_fig("attribute_histogram_plots")
-    plt.show()
-    # to make this notebook's output identical at every run
-    np.random.seed(42)
-    train_set, test_set = split_train_test(housing, 0.2)
-    len(train_set)
-    len(test_set)
 
 
 def test_set_check(identifier, test_ratio):
@@ -94,90 +78,52 @@ compare_props["Strat. %error"] = 100 * compare_props["Stratified"] / compare_pro
 
 compare_props
 
+# Now you should remove the income_cat attribute so the data is back to its original state
 for set_ in (strat_train_set, strat_test_set):
     set_.drop("income_cat", axis=1, inplace=True)
 
 # Discover and visualize the data to gain insights
 
-housing = strat_train_set.copy()
+# housing = strat_train_set.copy()
 
-scatter_plots(housing)
+# scatter_plots(housing)
 
-calif_image(housing)
+# calif_image(housing)
 
 # Looking for Correlations
-looking_for_correlation(housing)
+# looking_for_correlation(housing)
 
-if __name__ == '__main__':
-    sys.exit(0)
+# Prepare the data for Machine Learning algorithms
 
-# # Prepare the data for Machine Learning algorithms
+housing, housing_labels = features_labels(strat_train_set)
 
-# In[46]:
-
-
-housing = strat_train_set.drop("median_house_value", axis=1)  # drop labels for training set
-housing_labels = strat_train_set["median_house_value"].copy()
-
-# In[47]:
-
-
+# # Data Cleaning - missing features
 sample_incomplete_rows = housing[housing.isnull().any(axis=1)].head()
-sample_incomplete_rows
+print("sample_incomplete_rows\n{}".format(sample_incomplete_rows))
 
-# In[48]:
+sample_incomplete_rows.dropna(subset=["total_bedrooms"])  # Get rid of the corresponding districts
 
+sample_incomplete_rows.drop("total_bedrooms", axis=1)  # Get rid of the whole attribute.
 
-sample_incomplete_rows.dropna(subset=["total_bedrooms"])  # option 1
-
-# In[49]:
-
-
-sample_incomplete_rows.drop("total_bedrooms", axis=1)  # option 2
-
-# In[50]:
-
-
+# Set the values to some value (zero, the mean, the median, etc.).
 median = housing["total_bedrooms"].median()
-sample_incomplete_rows["total_bedrooms"].fillna(median, inplace=True)  # option 3
-
-# In[51]:
-
-
-sample_incomplete_rows
-
-# In[52]:
-
-
-from sklearn.impute import SimpleImputer
+sample_incomplete_rows["total_bedrooms"].fillna(median, inplace=True)
+print("sample_incomplete_rows\n{}".format(sample_incomplete_rows))
 
 imputer = SimpleImputer(strategy="median")
 
 # Remove the text attribute because median can only be calculated on numerical attributes:
-
-# In[53]:
-
-
 housing_num = housing.drop("ocean_proximity", axis=1)
 # alternatively: housing_num = housing.select_dtypes(include=[np.number])
 
-
-# In[54]:
-
-
 imputer.fit(housing_num)
-
-# In[55]:
-
-
-imputer.statistics_
+print("imputer.statistics_\n{}".format(imputer.statistics_))
 
 # Check that this is the same as manually computing the median of each attribute:
-
-# In[56]:
-
-
 housing_num.median().values
+
+if __name__ == '__main__':
+    sys.exit(0)
 
 # Transform the training set:
 

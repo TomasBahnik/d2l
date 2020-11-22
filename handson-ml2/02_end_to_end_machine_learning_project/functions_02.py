@@ -5,9 +5,8 @@ import numpy as np
 from matplotlib import image as mpimg, pyplot as plt
 from pandas.plotting import scatter_matrix
 
-PROJECT_ROOT_DIR = ".."
-CHAPTER_ID = "end_to_end_project"
-IMAGES_PATH = os.path.join(PROJECT_ROOT_DIR, "images", CHAPTER_ID)
+from common import PROJECT_ROOT_DIR, IMAGES_PATH
+from prepare_train_test_sets import split_train_test
 
 
 def save_fig(fig_id, tight_layout=True, fig_extension="png", resolution=300):
@@ -72,7 +71,7 @@ def looking_for_correlation(data):
     scatter_matrix(data[attributes], figsize=(12, 8))
     save_fig("scatter_matrix_plot")
     data.plot(kind="scatter", x="median_income", y="median_house_value",
-                 alpha=0.1)
+              alpha=0.1)
     plt.axis([0, 16, 0, 550000])
     save_fig("income_vs_house_value_scatterplot")
     # Experimenting with Attribute Combinations
@@ -82,7 +81,22 @@ def looking_for_correlation(data):
     corr_matrix = data.corr()
     corr_matrix["median_house_value"].sort_values(ascending=False)
     data.plot(kind="scatter", x="rooms_per_household", y="median_house_value",
-                 alpha=0.2)
+              alpha=0.2)
     plt.axis([0, 5, 0, 520000])
     plt.show()
     data.describe()
+
+
+def basic_info(data):
+    data.head()
+    data.info()
+    data["ocean_proximity"].value_counts()
+    data.describe()
+    data.hist(bins=50, figsize=(20, 15))
+    save_fig("attribute_histogram_plots")
+    plt.show()
+    # to make this notebook's output identical at every run
+    np.random.seed(42)
+    train_set, test_set = split_train_test(data, 0.2)
+    len(train_set)
+    len(test_set)

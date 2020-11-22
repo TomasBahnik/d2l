@@ -8,8 +8,10 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import StratifiedShuffleSplit
 
+from common import PROJECT_ROOT_DIR
+
 DOWNLOAD_ROOT = "https://raw.githubusercontent.com/ageron/handson-ml2/master/"
-HOUSING_PATH = os.path.join("../datasets", "housing")
+HOUSING_PATH = os.path.join(PROJECT_ROOT_DIR, "datasets", "housing")
 HOUSING_URL = DOWNLOAD_ROOT + "datasets/housing/housing.tgz"
 
 
