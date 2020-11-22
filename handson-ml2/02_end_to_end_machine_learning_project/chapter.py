@@ -1,7 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-
 import os
 import sys
 import warnings
@@ -15,7 +11,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 from functions_02 import save_fig, calif_image, IMAGES_PATH, scatter_plots, looking_for_correlation
-from prepare_train_test_sets import load_housing_data
+from prepare_train_test_sets import load_housing_data, fetch_housing_data
 from prepare_train_test_sets import split_data
 from prepare_train_test_sets import split_train_test
 from prepare_train_test_sets import strata
@@ -33,6 +29,7 @@ os.makedirs(IMAGES_PATH, exist_ok=True)
 # Ignore useless warnings (see SciPy issue #5998)
 warnings.filterwarnings(action="ignore", message="^internal gelsd")
 
+fetch_housing_data()
 housing = load_housing_data()
 
 
