@@ -10,6 +10,9 @@ import pandas as pd
 from sklearn.impute import SimpleImputer
 # from pandas.tools.plotting import scatter_matrix # For older versions of Pandas
 from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import OneHotEncoder
+# Order of Class is used as label of class
+from sklearn.preprocessing import OrdinalEncoder
 
 from common import IMAGES_PATH
 from prepare_data_ml_alg import features_labels
@@ -116,100 +119,58 @@ imputer = SimpleImputer(strategy="median")
 housing_num = housing.drop("ocean_proximity", axis=1)
 # alternatively: housing_num = housing.select_dtypes(include=[np.number])
 
+# fit the imputer instance to the training data
 imputer.fit(housing_num)
 print("imputer.statistics_\n{}".format(imputer.statistics_))
 
 # Check that this is the same as manually computing the median of each attribute:
 housing_num.median().values
 
-if __name__ == '__main__':
-    sys.exit(0)
-
-# Transform the training set:
-
-# In[57]:
-
-
+# transform the training set by replacing missing values with the learned medians
 X = imputer.transform(housing_num)
 
-# In[58]:
-
-
+# put it back into a pandas DataFrame,
 housing_tr = pd.DataFrame(X, columns=housing_num.columns,
                           index=housing.index)
 
-# In[59]:
-
-
 housing_tr.loc[sample_incomplete_rows.index.values]
 
-# In[60]:
-
-
 imputer.strategy
-
-# In[61]:
-
 
 housing_tr = pd.DataFrame(X, columns=housing_num.columns,
                           index=housing_num.index)
 
-# In[62]:
-
-
 housing_tr.head()
 
-# Now let's preprocess the categorical input feature, `ocean_proximity`:
-
-# In[63]:
-
-
+# Handling Text and Categorical Attributes
 housing_cat = housing[["ocean_proximity"]]
 housing_cat.head(10)
-
-# In[69]:
-
-
-from sklearn.preprocessing import OrdinalEncoder
 
 ordinal_encoder = OrdinalEncoder()
 housing_cat_encoded = ordinal_encoder.fit_transform(housing_cat)
 housing_cat_encoded[:10]
 
-# In[67]:
-
-
 ordinal_encoder.categories_
-
-# In[66]:
-
-
-from sklearn.preprocessing import OneHotEncoder
 
 cat_encoder = OneHotEncoder()
 housing_cat_1hot = cat_encoder.fit_transform(housing_cat)
 housing_cat_1hot
 
-# By default, the `OneHotEncoder` class returns a sparse array, but we can convert it to a dense array if needed by calling the `toarray()` method:
-
-# In[67]:
-
+# By default, the `OneHotEncoder` class returns a sparse array, but we can convert it to a dense
+# array if needed by calling the `toarray()` method:
 
 housing_cat_1hot.toarray()
 
 # Alternatively, you can set `sparse=False` when creating the `OneHotEncoder`:
 
-# In[68]:
-
-
 cat_encoder = OneHotEncoder(sparse=False)
 housing_cat_1hot = cat_encoder.fit_transform(housing_cat)
 housing_cat_1hot
 
-# In[69]:
-
-
 cat_encoder.categories_
+
+if __name__ == '__main__':
+    sys.exit(0)
 
 # Let's create a custom transformer to add extra attributes:
 
