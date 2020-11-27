@@ -1,7 +1,6 @@
 import sys
 
 import numpy as np
-import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
@@ -58,15 +57,6 @@ class CombinedAttributesAdder(BaseEstimator, TransformerMixin):
         else:
             return np.c_[X, rooms_per_household, population_per_household]
 
-
-attr_adder = CombinedAttributesAdder(add_bedrooms_per_room=False)
-housing_extra_attribs = attr_adder.transform(housing.values)
-
-housing_extra_attribs = pd.DataFrame(
-    housing_extra_attribs,
-    columns=list(housing.columns) + ["rooms_per_household", "population_per_household"],
-    index=housing.index)
-housing_extra_attribs.head()
 
 # Now let's build a pipeline for pre-processing the numerical attributes:
 # As with all the transformations, it is important to fit the scalers to the training data only,
