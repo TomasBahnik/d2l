@@ -256,8 +256,10 @@ print("Labels:", list(some_labels))
 housing_predictions = lin_reg.predict(housing_prepared)
 lin_mse = mean_squared_error(housing_labels, housing_predictions)
 lin_rmse = np.sqrt(lin_mse)
+print("Linear model RMS error={}".format(lin_rmse))
 
 lin_mae = mean_absolute_error(housing_labels, housing_predictions)
+print("Linear model mean absolute error={}".format(lin_mae))
 
 if __name__ == '__main__':
     sys.exit(0)
