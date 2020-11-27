@@ -7,12 +7,19 @@ import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.base import BaseEstimator, TransformerMixin
+from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error
+from sklearn.metrics import mean_squared_error
 # from pandas.tools.plotting import scatter_matrix # For older versions of Pandas
 from sklearn.model_selection import train_test_split
+from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 # Order of Class is used as label of class
 from sklearn.preprocessing import OrdinalEncoder
+from sklearn.preprocessing import StandardScaler
 
 from common import IMAGES_PATH
 from prepare_data_ml_alg import features_labels
@@ -169,16 +176,7 @@ housing_cat_1hot
 
 cat_encoder.categories_
 
-if __name__ == '__main__':
-    sys.exit(0)
-
 # Let's create a custom transformer to add extra attributes:
-
-# In[70]:
-
-
-from sklearn.base import BaseEstimator, TransformerMixin
-
 # column index
 rooms_ix, bedrooms_ix, population_ix, households_ix = 3, 4, 5, 6
 
@@ -204,22 +202,16 @@ class CombinedAttributesAdder(BaseEstimator, TransformerMixin):
 attr_adder = CombinedAttributesAdder(add_bedrooms_per_room=False)
 housing_extra_attribs = attr_adder.transform(housing.values)
 
-# In[71]:
-
-
 housing_extra_attribs = pd.DataFrame(
     housing_extra_attribs,
     columns=list(housing.columns) + ["rooms_per_household", "population_per_household"],
     index=housing.index)
 housing_extra_attribs.head()
 
-# Now let's build a pipeline for preprocessing the numerical attributes:
-
-# In[72]:
-
-
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler
+# Now let's build a pipeline for pre-processing the numerical attributes:
+# As with all the transformations, it is important to fit the scalers to the training data only,
+# not to the full dataset (including the test set).
+# Only then can you use them to transform the training set and the test set (and new data).
 
 num_pipeline = Pipeline([
     ('imputer', SimpleImputer(strategy="median")),
@@ -228,16 +220,6 @@ num_pipeline = Pipeline([
 ])
 
 housing_num_tr = num_pipeline.fit_transform(housing_num)
-
-# In[73]:
-
-
-housing_num_tr
-
-# In[74]:
-
-
-from sklearn.compose import ColumnTransformer
 
 num_attribs = list(housing_num)
 cat_attribs = ["ocean_proximity"]
@@ -249,93 +231,11 @@ full_pipeline = ColumnTransformer([
 
 housing_prepared = full_pipeline.fit_transform(housing)
 
-# In[75]:
-
-
-housing_prepared
-
-# In[76]:
-
-
-housing_prepared.shape
-
-# For reference, here is the old solution based on a `DataFrameSelector` transformer (to just select a subset of the Pandas `DataFrame` columns), and a `FeatureUnion`:
-
-# In[77]:
-
-
-from sklearn.base import BaseEstimator, TransformerMixin
-
-
-# Create a class to select numerical or categorical columns
-class OldDataFrameSelector(BaseEstimator, TransformerMixin):
-    def __init__(self, attribute_names):
-        self.attribute_names = attribute_names
-
-    def fit(self, X, y=None):
-        return self
-
-    def transform(self, X):
-        return X[self.attribute_names].values
-
-
-# Now let's join all these components into a big pipeline that will preprocess both the numerical and the categorical features:
-
-# In[78]:
-
-
-num_attribs = list(housing_num)
-cat_attribs = ["ocean_proximity"]
-
-old_num_pipeline = Pipeline([
-    ('selector', OldDataFrameSelector(num_attribs)),
-    ('imputer', SimpleImputer(strategy="median")),
-    ('attribs_adder', CombinedAttributesAdder()),
-    ('std_scaler', StandardScaler()),
-])
-
-old_cat_pipeline = Pipeline([
-    ('selector', OldDataFrameSelector(cat_attribs)),
-    ('cat_encoder', OneHotEncoder(sparse=False)),
-])
-
-# In[79]:
-
-
-from sklearn.pipeline import FeatureUnion
-
-old_full_pipeline = FeatureUnion(transformer_list=[
-    ("num_pipeline", old_num_pipeline),
-    ("cat_pipeline", old_cat_pipeline),
-])
-
-# In[80]:
-
-
-old_housing_prepared = old_full_pipeline.fit_transform(housing)
-old_housing_prepared
-
-# The result is the same as with the `ColumnTransformer`:
-
-# In[81]:
-
-
-np.allclose(housing_prepared, old_housing_prepared)
-
 # # Select and train a model
-
-# In[82]:
-
-
-from sklearn.linear_model import LinearRegression
-
 lin_reg = LinearRegression()
 lin_reg.fit(housing_prepared, housing_labels)
 
-# In[83]:
-
-
-# let's try the full preprocessing pipeline on a few training instances
+# let's try the full pre-processing pipeline on a few training instances
 some_data = housing.iloc[:5]
 some_labels = housing_labels.iloc[:5]
 some_data_prepared = full_pipeline.transform(some_data)
@@ -343,37 +243,24 @@ some_data_prepared = full_pipeline.transform(some_data)
 print("Predictions:", lin_reg.predict(some_data_prepared))
 
 # Compare against the actual values:
-
-# In[84]:
-
-
 print("Labels:", list(some_labels))
 
-# In[85]:
+# My
+# Predictions: [210644.60459286 317768.80697211 210956.43331178  59218.98886849  189747.55849879]
+# Labels:      [286600.0, 340600.0, 196900.0, 46300.0, 254500.0]
 
-
-some_data_prepared
-
-# In[86]:
-
-
-from sklearn.metrics import mean_squared_error
+# Book
+# Predictions: [210644.6045     317768.8069     210956.4333      59218.9888      189747.5584]
+# Labels:      [286600.0, 340600.0, 196900.0, 46300.0, 254500.0]
 
 housing_predictions = lin_reg.predict(housing_prepared)
 lin_mse = mean_squared_error(housing_labels, housing_predictions)
 lin_rmse = np.sqrt(lin_mse)
-lin_rmse
-
-# In[87]:
-
-
-from sklearn.metrics import mean_absolute_error
 
 lin_mae = mean_absolute_error(housing_labels, housing_predictions)
-lin_mae
 
-# In[88]:
-
+if __name__ == '__main__':
+    sys.exit(0)
 
 from sklearn.tree import DecisionTreeRegressor
 
