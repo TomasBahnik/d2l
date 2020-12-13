@@ -1,17 +1,22 @@
 import sys
+import time
 
 import numpy as np
+import pandas as pd
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_absolute_error
 from sklearn.metrics import mean_squared_error
+from sklearn.model_selection import cross_val_score
 # from pandas.tools.plotting import scatter_matrix # For older versions of Pandas
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 # Order of Class is used as label of class
 from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeRegressor
 
 from prepare_data_ml_alg import features_labels
 from prepare_train_test_sets import load_housing_data, fetch_housing_data
@@ -110,6 +115,56 @@ print("Linear model RMS error={}".format(lin_rmse))
 
 lin_mae = mean_absolute_error(housing_labels, housing_predictions)
 print("Linear model mean absolute error={}".format(lin_mae))
+
+tree_reg = DecisionTreeRegressor()
+t0 = time.time()
+tree_reg.fit(housing_prepared, housing_labels)
+t1 = time.time()
+print("Decision Tree model RMS time={}".format(t1 - t0))
+
+housing_predictions = tree_reg.predict(housing_prepared)
+tree_mse = mean_squared_error(housing_labels, housing_predictions)
+tree_rmse = np.sqrt(tree_mse)
+print("Decision Tree model RMS error={}".format(tree_rmse))
+
+
+def display_scores(scores):
+    print("Scores:", scores)
+    print("Mean:", scores.mean())
+    print("Standard deviation:", scores.std())
+
+
+# Scikit-Learn’s cross-validation features expect a utility function (greater is better)
+# rather than a cost function (lower is better),
+scores = cross_val_score(tree_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
+tree_rmse_scores = np.sqrt(-scores)
+display_scores(tree_rmse_scores)
+
+print("Decision Tree model scores stats : {}".format(pd.Series(tree_rmse_scores).describe()))
+
+lin_scores = cross_val_score(lin_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
+scores = cross_val_score(lin_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
+lin_rmse_scores = np.sqrt(-lin_scores)
+display_scores(lin_rmse_scores)
+
+print("Linear model rmse scores stats : {}".format(pd.Series(lin_rmse_scores).describe()))
+
+# **Note**: we specify `n_estimators=100` to be future-proof since the default value is going to change to 100
+# in Scikit-Learn 0.22 (for simplicity, this is not shown in the book).
+forest_reg = RandomForestRegressor(n_estimators=100, random_state=42)
+forest_reg.fit(housing_prepared, housing_labels)
+housing_predictions = forest_reg.predict(housing_prepared)
+forest_mse = mean_squared_error(housing_labels, housing_predictions)
+forest_rmse = np.sqrt(forest_mse)
+print("Random Forest model RMS error={}".format(forest_rmse))
+
+t0 = time.time()
+forest_scores = cross_val_score(forest_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
+t1 = time.time()
+print("Random Forest model cross validation score took {} sec.".format(t1 - t0))
+forest_rmse_scores = np.sqrt(-forest_scores)
+print("Random Forest model RMS error scores")
+display_scores(forest_rmse_scores)
 
 if __name__ == '__main__':
     sys.exit(0)
