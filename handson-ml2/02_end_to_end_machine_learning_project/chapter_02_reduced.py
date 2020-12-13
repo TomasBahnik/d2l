@@ -128,26 +128,31 @@ tree_rmse = np.sqrt(tree_mse)
 print("Decision Tree model RMS error={}".format(tree_rmse))
 
 
+# Scikit-Learn’s cross-validation features expect a utility function (greater is better)
+# rather than a cost function (lower is better),
+def cross_validation(model, features, labels):
+    print("Model type : {}".format(type(model)))
+    start = time.time()
+    scores = cross_val_score(model, features, labels, scoring="neg_mean_squared_error",
+                             cv=10)
+    end = time.time()
+    print("Model cross validation score took {} sec.".format(end - start))
+    rmse_scores = np.sqrt(-scores)
+    print("Model RMS error scores")
+    display_scores(rmse_scores)
+    print("Model RMS error scores stats : {}".format(pd.Series(rmse_scores).describe()))
+
+
+# pandas series std differs from ndarray std
 def display_scores(scores):
     print("Scores:", scores)
     print("Mean:", scores.mean())
     print("Standard deviation:", scores.std())
 
 
-# Scikit-Learn’s cross-validation features expect a utility function (greater is better)
-# rather than a cost function (lower is better),
-scores = cross_val_score(tree_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
-tree_rmse_scores = np.sqrt(-scores)
-display_scores(tree_rmse_scores)
+cross_validation(lin_reg, housing_prepared, housing_labels)
 
-print("Decision Tree model scores stats : {}".format(pd.Series(tree_rmse_scores).describe()))
-
-lin_scores = cross_val_score(lin_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
-scores = cross_val_score(lin_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
-lin_rmse_scores = np.sqrt(-lin_scores)
-display_scores(lin_rmse_scores)
-
-print("Linear model rmse scores stats : {}".format(pd.Series(lin_rmse_scores).describe()))
+cross_validation(tree_reg, housing_prepared, housing_labels)
 
 # **Note**: we specify `n_estimators=100` to be future-proof since the default value is going to change to 100
 # in Scikit-Learn 0.22 (for simplicity, this is not shown in the book).
@@ -158,13 +163,7 @@ forest_mse = mean_squared_error(housing_labels, housing_predictions)
 forest_rmse = np.sqrt(forest_mse)
 print("Random Forest model RMS error={}".format(forest_rmse))
 
-t0 = time.time()
-forest_scores = cross_val_score(forest_reg, housing_prepared, housing_labels, scoring="neg_mean_squared_error", cv=10)
-t1 = time.time()
-print("Random Forest model cross validation score took {} sec.".format(t1 - t0))
-forest_rmse_scores = np.sqrt(-forest_scores)
-print("Random Forest model RMS error scores")
-display_scores(forest_rmse_scores)
+# cross_validation(forest_reg, housing_prepared, housing_labels)
 
 if __name__ == '__main__':
     sys.exit(0)
